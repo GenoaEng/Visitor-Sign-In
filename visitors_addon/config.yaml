@@ -17,7 +17,7 @@ ingress_port: 8420
 startup: application
 
 schema:
-  admin_password: password?
+  admin_password: strongpassword
 
 map:
   - type: addon_config

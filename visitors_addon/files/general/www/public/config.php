@@ -37,7 +37,7 @@ if (file_exists($configPath)) {
 }
 
 // Database configuration with restricted permissions
-$dbfile = '/data/visitor_signin.db';
+$dbfile = __DIR__ . '/visitor_signin.db';
 $dbPermissions = 0600; // Read/write for owner only
 
 // Ensure database file has correct permissions

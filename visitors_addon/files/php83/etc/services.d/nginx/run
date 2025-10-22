@@ -1,5 +1,0 @@
-#!/usr/bin/with-contenv sh
-set -e
-mkdir -p /run/nginx /run/php
-chown -R nginx:nginx /run/nginx /run/php
-exec nginx -g 'daemon off;'

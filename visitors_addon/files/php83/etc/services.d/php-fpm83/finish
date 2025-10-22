@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv sh
+# Always exit cleanly; prevents "Exec format error" complaints
+exit 0

@@ -73,10 +73,22 @@ RUN { \
 # Copy your project (must include /www and any s6 services)
 COPY files/general files/php83 /
 
-# Ensure runtime dirs and sane perms
-RUN mkdir -p /run/nginx /run/php /www/public \
- && chown -R nginx:nginx /run/nginx /run/php /www /data \
- && chmod -R 775 /data \
- && chmod -R 755 /www
+# ✅ Normalize s6 scripts (strip CRLF) and ensure executables + runtime perms
+RUN set -eux; \
+  # Fix line endings & executable bit for s6 service scripts
+  if [ -d /etc/services.d ]; then \
+    find /etc/services.d -type f \( -name run -o -name finish \) -print0 2>/dev/null \
+      | xargs -0 -r -I{} sh -c "sed -i 's/\r$//' {}; chmod +x {}"; \
+  fi; \
+  # Do the same for any cont-init.d scripts you may add
+  if [ -d /etc/cont-init.d ]; then \
+    find /etc/cont-init.d -type f -print0 \
+      | xargs -0 -r -I{} sh -c "sed -i 's/\r$//' {}; chmod +x {}"; \
+  fi; \
+  # Ensure runtime dirs and sane permissions
+  mkdir -p /run/nginx /run/php /www/public; \
+  chown -R nginx:nginx /run/nginx /run/php /www /data; \
+  chmod -R 775 /data; \
+  chmod -R 755 /www
 
 ENTRYPOINT ["/init"]

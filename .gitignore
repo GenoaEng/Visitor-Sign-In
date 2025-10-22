@@ -1,0 +1,130 @@
+# ===========================================
+# VISUAL STUDIO / VS CODE
+# ===========================================
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.ncb
+*.aps
+*.pdb
+*.idb
+ipch/
+*.obj
+*.tlog
+*.cache
+*.log
+*.dbmdl
+*.opendb
+*.ipch
+*.ilk
+*.iobj
+*.ipdb
+*.tmp
+
+# ===========================================
+# BUILD & TEMP FILES
+# ===========================================
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Tt]emp/
+Debug/
+Release/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Bb]ackup/
+dist/
+tmp/
+.cache/
+coverage/
+
+# ===========================================
+# DOCKER / CONTAINERS
+# ===========================================
+*.tar
+*.pid
+*.pid.lock
+*.sock
+docker-compose.override.yml
+.env
+.env.local
+.env.*.local
+
+# ===========================================
+# HOME ASSISTANT ADD-ON / DATA
+# ===========================================
+data/
+config/
+db.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ===========================================
+# PHP / COMPOSER
+# ===========================================
+vendor/
+composer.lock
+composer.phar
+.phpunit.result.cache
+*.log
+*.cache
+*.tmp
+
+# ===========================================
+# NODE / FRONTEND
+# ===========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# ===========================================
+# SYSTEM / OS FILES
+# ===========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.bak
+*.orig
+*.swp
+*.swo
+*~
+
+# ===========================================
+# IDES / TOOLS
+# ===========================================
+.idea/
+*.iml
+*.ipr
+*.iws
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# ===========================================
+# OPTIONAL PROJECT DIRECTORIES
+# ===========================================
+logs/
+uploads/
+storage/
+www/public/uploads/
+www/public/cache/

@@ -70,24 +70,43 @@ RUN { \
       echo "}"; \
     } > /etc/nginx/http.d/default.conf
 
-# Copy your project (must include /www and any s6 services)
+# Copy your project (must include /www and any s6 services you want as content)
 COPY files/general files/php83 /
 
-# ✅ Normalize s6 scripts (strip CRLF) and ensure executables + runtime perms
+# --- Force-create s6 service scripts with correct perms/line endings ---
 RUN set -eux; \
-  # Fix line endings & executable bit for s6 service scripts
-  if [ -d /etc/services.d ]; then \
-    find /etc/services.d -type f \( -name run -o -name finish \) -print0 2>/dev/null \
-      | xargs -0 -r -I{} sh -c "sed -i 's/\r$//' {}; chmod +x {}"; \
-  fi; \
-  # Do the same for any cont-init.d scripts you may add
-  if [ -d /etc/cont-init.d ]; then \
-    find /etc/cont-init.d -type f -print0 \
-      | xargs -0 -r -I{} sh -c "sed -i 's/\r$//' {}; chmod +x {}"; \
-  fi; \
-  # Ensure runtime dirs and sane permissions
+  mkdir -p /etc/services.d/php-fpm83 /etc/services.d/nginx; \
+  cat > /etc/services.d/php-fpm83/run <<'SH'; \
+#!/usr/bin/with-contenv sh
+set -e
+mkdir -p /run/php
+chown -R nginx:nginx /run/php
+if [ -x /usr/sbin/php-fpm ]; then
+  exec /usr/sbin/php-fpm -F
+else
+  exec /usr/sbin/php-fpm83 -F
+fi
+SH
+  cat > /etc/services.d/php-fpm83/finish <<'SH'; \
+#!/usr/bin/with-contenv sh
+exit 0
+SH
+  cat > /etc/services.d/nginx/run <<'SH'; \
+#!/usr/bin/with-contenv sh
+set -e
+mkdir -p /run/nginx /run/php
+chown -R nginx:nginx /run/nginx /run/php
+exec nginx -g 'daemon off;'
+SH
+  cat > /etc/services.d/nginx/finish <<'SH'; \
+#!/usr/bin/with-contenv sh
+exit 0
+SH
+  chmod +x /etc/services.d/php-fpm83/run /etc/services.d/php-fpm83/finish \
+           /etc/services.d/nginx/run      /etc/services.d/nginx/finish; \
+  # Ensure runtime dirs and ownership
   mkdir -p /run/nginx /run/php /www/public; \
-  chown -R nginx:nginx /run/nginx /run/php /www /data; \
+  chown -R nginx:nginx /www /run/nginx /run/php /data; \
   chmod -R 775 /data; \
   chmod -R 755 /www
 
